@@ -38,7 +38,7 @@ dependencies {
 	}
 	*/
 	modImplementation libs.quilt.loader
-	modImplementation "org.quiltmc:qsl:6.1.2+1.20.1"
+	modImplementation libs.quilted.fabric.api
 }
 
 processResources {
