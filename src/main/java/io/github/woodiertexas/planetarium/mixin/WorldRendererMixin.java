@@ -120,7 +120,7 @@ public class WorldRendererMixin {
 	private void renderStar(Identifier star, float starSize, MatrixStack matrices, float tickDelta, float brightness) {
 		matrices.push();
 		matrices.multiply(Axis.Y_NEGATIVE.rotationDegrees(20.0f));
-		matrices.multiply(Axis.Z_NEGATIVE.rotationDegrees(90.0f));
+		matrices.multiply(Axis.Z_NEGATIVE.rotationDegrees(75.0f));
 		Matrix4f matrix4f = matrices.peek().getModel();
 		
 		if (world.getTimeOfDay() % 24000L >= 11800) {
