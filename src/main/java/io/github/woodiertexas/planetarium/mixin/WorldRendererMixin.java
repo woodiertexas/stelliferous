@@ -22,9 +22,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
 import static io.github.woodiertexas.planetarium.Planetarium.MODID;
 
 @Mixin(WorldRenderer.class)
@@ -68,6 +65,14 @@ public class WorldRendererMixin {
 		}
 	}
 	
+	private void buildBuffer(Matrix4f matrix4f, float size) {
+		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+		bufferBuilder.vertex(matrix4f, -size, -100.0F, size).uv(0.0F, 0.0F).next();
+		bufferBuilder.vertex(matrix4f, size, -100.0F, size).uv(1.0F, 0.0F).next(); // u: 1.0
+		bufferBuilder.vertex(matrix4f, size, -100.0F, -size).uv(1.0F, 1.0F).next(); // u: 1.0, v: 1.0
+		bufferBuilder.vertex(matrix4f, -size, -100.0F, -size).uv(0.0F, 1.0F).next(); // v: 1.0
+	}
+	
 	
 	/**
 	 * Renders a planet texture in the Minecraft skybox
@@ -90,12 +95,8 @@ public class WorldRendererMixin {
 		
 		if (world.getTimeOfDay() % 24000L >= 11800) {
 			RenderSystem.setShaderTexture(0, planet);
-			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-			bufferBuilder.vertex(matrix4f, -planetSize, -100.0F, planetSize).uv(0.0F, 0.0F).next();
-			bufferBuilder.vertex(matrix4f, planetSize, -100.0F, planetSize).uv(1.0F, 0.0F).next(); // u: 1.0
-			bufferBuilder.vertex(matrix4f, planetSize, -100.0F, -planetSize).uv(1.0F, 1.0F).next(); // u: 1.0, v: 1.0
-			bufferBuilder.vertex(matrix4f, -planetSize, -100.0F, -planetSize).uv(0.0F, 1.0F).next(); // v: 1.0
 			
+			buildBuffer(matrix4f, planetSize);
 			fade(tickDelta, brightness);
 			
 			BufferRenderer.drawWithShader(bufferBuilder.end());
@@ -125,12 +126,8 @@ public class WorldRendererMixin {
 		
 		if (world.getTimeOfDay() % 24000L >= 11800) {
 			RenderSystem.setShaderTexture(0, star);
-			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-			bufferBuilder.vertex(matrix4f, -starSize, -100.0F, starSize).uv(0.0F, 0.0F).next();
-			bufferBuilder.vertex(matrix4f, starSize, -100.0F, starSize).uv(1.0F, 0.0F).next(); // u: 1.0
-			bufferBuilder.vertex(matrix4f, starSize, -100.0F, -starSize).uv(1.0F, 1.0F).next(); // u: 1.0, v: 1.0
-			bufferBuilder.vertex(matrix4f, -starSize, -100.0F, -starSize).uv(0.0F, 1.0F).next(); // v: 1.0
 			
+			buildBuffer(matrix4f, starSize);
 			fade(tickDelta, brightness);
 			
 			BufferRenderer.drawWithShader(bufferBuilder.end());
@@ -148,14 +145,14 @@ public class WorldRendererMixin {
 	private void renderPlanets(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera preStep, boolean skipRendering, Runnable preRender, CallbackInfo ci) {
 		assert world != null;
 		
-		renderPlanet(MERCURY, 8f, -180.0, -160.0, matrices, world, tickDelta, 125.0f, 1.80f);
-		renderPlanet(VENUS, 10f, -160.0, -140.0, matrices, world, tickDelta, 120.0f, 2.10f);
-		renderPlanet(MARS, 8f, -35.0, -35.0, matrices, world, tickDelta, 60.0f, 1.80f);
-		renderPlanet(JUPITER, 20.0f, 130.0, -80.0, matrices, world, tickDelta, -25.0f, 1.80f);
-		renderPlanet(SATURN, 13.0f, 110.0, -100.0, matrices, world, tickDelta, -15.0f, 1.80f);
-		renderPlanet(URANUS, 5.5f, -45.0, 0.0, matrices, world, tickDelta, -60.0f, 1.80f);
-		renderPlanet(NEPTUNE, 5.5f, -20.0, 0.0, matrices, world, tickDelta, -80.0f, 1.80f);
+		renderPlanet(MERCURY, 9.5f, -180.0, -160.0, matrices, world, tickDelta, 125.0f, 1.80f);
+		renderPlanet(VENUS, 12.5f, -160.0, -140.0, matrices, world, tickDelta, 120.0f, 2.10f);
+		renderPlanet(MARS, 9.5f, -35.0, -35.0, matrices, world, tickDelta, 60.0f, 1.80f);
+		renderPlanet(JUPITER, 25.0f, 130.0, -80.0, matrices, world, tickDelta, -25.0f, 1.80f);
+		renderPlanet(SATURN, 16.2f, 110.0, -100.0, matrices, world, tickDelta, -15.0f, 1.80f);
+		renderPlanet(URANUS, 7.0f, -45.0, 0.0, matrices, world, tickDelta, -60.0f, 1.80f);
+		renderPlanet(NEPTUNE, 7.0f, -20.0, 0.0, matrices, world, tickDelta, -80.0f, 1.80f);
 		
-		renderStar(NORTH_STAR, 0.75f, matrices, tickDelta, 1.50f);
+		renderStar(NORTH_STAR, 1.1f, matrices, tickDelta, 1.50f);
 	}
 }
