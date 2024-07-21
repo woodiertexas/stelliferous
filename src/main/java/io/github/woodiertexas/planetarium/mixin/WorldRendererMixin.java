@@ -26,35 +26,39 @@ import static io.github.woodiertexas.planetarium.Planetarium.MODID;
 
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
+	/*
 	@Shadow
 	private @Nullable ClientWorld world;
 	
 	@Unique
-	private static final Identifier MERCURY = new Identifier(MODID, "textures/environment/mercury.png");
+	private static final Identifier MERCURY = Identifier.of(MODID, "textures/environment/mercury.png");
 	
 	@Unique
-	private static final Identifier VENUS = new Identifier(MODID, "textures/environment/venus.png");
+	private static final Identifier VENUS = Identifier.of(MODID, "textures/environment/venus.png");
 	
 	@Unique
-	private static final Identifier MARS = new Identifier(MODID, "textures/environment/mars.png");
+	private static final Identifier MARS = Identifier.of(MODID, "textures/environment/mars.png");
 	
 	@Unique
-	private static final Identifier JUPITER = new Identifier(MODID, "textures/environment/jupiter.png");
+	private static final Identifier JUPITER = Identifier.of(MODID, "textures/environment/jupiter.png");
 	
 	@Unique
-	private static final Identifier SATURN = new Identifier(MODID, "textures/environment/saturn.png");
+	private static final Identifier SATURN = Identifier.of(MODID, "textures/environment/saturn.png");
 	
 	@Unique
-	private static final Identifier URANUS = new Identifier(MODID, "textures/environment/uranus.png");
+	private static final Identifier URANUS = Identifier.of(MODID, "textures/environment/uranus.png");
 	
 	@Unique
-	private static final Identifier NEPTUNE = new Identifier(MODID, "textures/environment/neptune.png");
+	private static final Identifier NEPTUNE = Identifier.of(MODID, "textures/environment/neptune.png");
 	
 	@Unique
-	private static final Identifier NORTH_STAR = new Identifier("minecraft", "textures/item/nether_star.png");
+	private static final Identifier NORTH_STAR = Identifier.of("minecraft", "textures/item/nether_star.png");
 	
 	@Unique
-	private final BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
+	Tessellator tessellator = Tessellator.getInstance();
+	
+	@Unique
+	private final BufferBuilder bufferBuilder = tessellator.method_60827(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
 	
 	@Unique
 	private void fade(float tickDelta, float brightness) {
@@ -66,30 +70,20 @@ public class WorldRendererMixin {
 	}
 	
 	private void buildBuffer(Matrix4f matrix4f, float size) {
-		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-		bufferBuilder.vertex(matrix4f, -size, -100.0F, size).uv(0.0F, 0.0F).next();
-		bufferBuilder.vertex(matrix4f, size, -100.0F, size).uv(1.0F, 0.0F).next(); // u: 1.0
-		bufferBuilder.vertex(matrix4f, size, -100.0F, -size).uv(1.0F, 1.0F).next(); // u: 1.0, v: 1.0
-		bufferBuilder.vertex(matrix4f, -size, -100.0F, -size).uv(0.0F, 1.0F).next(); // v: 1.0
+		tessellator.method_60827(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+		bufferBuilder.method_22918(matrix4f, -size, -100.0F, size).method_22913(0.0F, 0.0F);
+		bufferBuilder.method_22918(matrix4f, size, -100.0F, size).method_22913(1.0F, 0.0F); // u: 1.0
+		bufferBuilder.method_22918(matrix4f, size, -100.0F, -size).method_22913(1.0F, 1.0F); // u: 1.0, v: 1.0
+		bufferBuilder.method_22918(matrix4f, -size, -100.0F, -size).method_22913(0.0F, 1.0F); // v: 1.0
 	}
 	
 	
-	/**
-	 * Renders a planet texture in the Minecraft skybox
-	 * @param planet the planet texture to use
-	 * @param planetSize how big the planet is
-	 * @param translateX the X position in the sky
-	 * @param translateY the Y position in the sky
-	 * @param matrices the MatrixStack
-	 * @param world the World
-	 * @param tickDelta time between ticks
-	 * @param planetPhase 
-	 * @param brightness how bright the planet is
-	 */
+
 	@Unique
 	private void renderPlanet(Identifier planet, float planetSize, double translateX, double translateY, MatrixStack matrices, World world, float tickDelta, float planetPhase, float brightness) {
 		matrices.push();
-		matrices.multiply(Axis.X_POSITIVE.rotationDegrees(world.getSkyAngle(tickDelta) + planetPhase));
+		
+		matrices.rotate(Axis.X_POSITIVE.rotationDegrees(world.getSkyAngle(tickDelta) + planetPhase));
 		matrices.translate(translateX, translateY, 0.0);
 		Matrix4f matrix4f = matrices.peek().getModel();
 		
@@ -99,29 +93,22 @@ public class WorldRendererMixin {
 			buildBuffer(matrix4f, planetSize);
 			fade(tickDelta, brightness);
 			
-			BufferRenderer.drawWithShader(bufferBuilder.end());
+			BufferRenderer.drawWithShader(bufferBuilder.method_60800());
 		} else {
 			RenderSystem.setShaderTexture(0, 0);
-			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-			BufferRenderer.drawWithShader(bufferBuilder.end());
+			tessellator.method_60827(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+			BufferRenderer.drawWithShader(bufferBuilder.method_60800());
 		}
 		
 		matrices.pop();
 	}
 	
-	/**
-	 * Renders a star in the Minecraft skybox.
-	 * @param star the star texture to use (Example: nether star)
-	 * @param starSize how big the star is
-	 * @param matrices the MatrixStack
-	 * @param tickDelta time between ticks
-	 * @param brightness how bright the star is
-	 */
+	
 	@Unique
 	private void renderStar(Identifier star, float starSize, MatrixStack matrices, float tickDelta, float brightness) {
 		matrices.push();
-		matrices.multiply(Axis.Y_NEGATIVE.rotationDegrees(20.0f));
-		matrices.multiply(Axis.Z_NEGATIVE.rotationDegrees(75.0f));
+		matrices.rotate(Axis.Y_NEGATIVE.rotationDegrees(20.0f));
+		matrices.rotate(Axis.Z_NEGATIVE.rotationDegrees(75.0f));
 		Matrix4f matrix4f = matrices.peek().getModel();
 		
 		if (world.getTimeOfDay() % 24000L >= 11800) {
@@ -130,29 +117,52 @@ public class WorldRendererMixin {
 			buildBuffer(matrix4f, starSize);
 			fade(tickDelta, brightness);
 			
-			BufferRenderer.drawWithShader(bufferBuilder.end());
+			BufferRenderer.drawWithShader(bufferBuilder.method_60800());
 		} else {
 			RenderSystem.setShaderTexture(0, 0);
-			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-			BufferRenderer.drawWithShader(bufferBuilder.end());
+			tessellator.method_60827(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+			BufferRenderer.drawWithShader(bufferBuilder.method_60800());
 		}
 		
 		matrices.pop();
 	}
+	*/
 	
+	@Shadow
+	private @Nullable ClientWorld world;
+	
+	@Unique
+	Tessellator tessellator = Tessellator.getInstance();
+	
+	@Unique
+	private static final Identifier JUPITER = Identifier.of(MODID, "textures/environment/jupiter.png");
+	
+	private void renderTheRestOfThePlanet(Identifier planet, MatrixStack matrixStack) {
+		Matrix4f matrix4f = matrixStack.peek().getModel();
+		
+		RenderSystem.setShaderTexture(0, planet);
+		
+		BufferBuilder bufferBuilder = tessellator.method_60827(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+		
+		float size = 20.0f;
+		bufferBuilder.method_22918(matrix4f, -size, -100.0F, size).method_22913(0.0F, 0.0F);
+		bufferBuilder.method_22918(matrix4f, size, -100.0F, size).method_22913(1.0F, 0.0F); // u: 1.0
+		bufferBuilder.method_22918(matrix4f, size, -100.0F, -size).method_22913(1.0F, 1.0F); // u: 1.0, v: 1.0
+		bufferBuilder.method_22918(matrix4f, -size, -100.0F, -size).method_22913(0.0F, 1.0F); // v: 1.0
+		BufferRenderer.drawWithShader(bufferBuilder.method_60800());
+	}
 	
 	@Inject(method = "renderSky", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getStarBrightness(F)F"))
-	private void renderPlanets(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera preStep, boolean skipRendering, Runnable preRender, CallbackInfo ci) {
-		assert world != null;
+	
+	//public void renderSky(Matrix4f projectionMatrix, Matrix4f matrix4f, float tickDelta, Camera preStep, boolean skipRendering, Runnable preRender)
+	private void renderPlanets(Matrix4f projectionMatrix, Matrix4f matrix4f, float tickDelta, Camera preStep, boolean skipRendering, Runnable preRender, CallbackInfo ci) {
+		MatrixStack matrixStack = new MatrixStack();
+		matrixStack.multiply(projectionMatrix);
 		
-		renderPlanet(MERCURY, 9.5f, -180.0, -160.0, matrices, world, tickDelta, 125.0f, 1.80f);
-		renderPlanet(VENUS, 12.5f, -160.0, -140.0, matrices, world, tickDelta, 120.0f, 2.10f);
-		renderPlanet(MARS, 9.5f, -35.0, -35.0, matrices, world, tickDelta, 60.0f, 1.80f);
-		renderPlanet(JUPITER, 25.0f, 130.0, -80.0, matrices, world, tickDelta, -25.0f, 1.80f);
-		renderPlanet(SATURN, 16.2f, 110.0, -100.0, matrices, world, tickDelta, -15.0f, 1.80f);
-		renderPlanet(URANUS, 7.0f, -45.0, 0.0, matrices, world, tickDelta, -60.0f, 1.80f);
-		renderPlanet(NEPTUNE, 7.0f, -20.0, 0.0, matrices, world, tickDelta, -80.0f, 1.80f);
+		matrixStack.translate(-30.0, 0.0, 40.0);
+		matrixStack.rotate(Axis.Y_POSITIVE.rotation(30.0f));
+		matrixStack.rotate(Axis.Z_POSITIVE.rotationDegrees(world.getSkyAngle(tickDelta) * 360.0F));
 		
-		renderStar(NORTH_STAR, 1.1f, matrices, tickDelta, 1.50f);
+		renderTheRestOfThePlanet(JUPITER, matrixStack);
 	}
 }
