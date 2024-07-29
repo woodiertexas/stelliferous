@@ -157,14 +157,16 @@ public class WorldRendererMixin {
 		matrixStack.multiply(projectionMatrix);
 		
 		// jupiter
-		matrixStack.rotate(Axis.X_POSITIVE.rotationDegrees(90));
-		matrixStack.rotate(Axis.Z_POSITIVE.rotationDegrees(-45));
-		
-		matrix4f = matrixStack.peek().getModel();
+		matrixStack.rotate(Axis.Z_POSITIVE.rotationDegrees(-90));
+		matrixStack.rotate(Axis.X_POSITIVE.rotationDegrees(45));
+		matrixStack.rotate(Axis.Y_POSITIVE.rotationDegrees(-90));
+		//matrixStack.rotate(Axis.X_POSITIVE.rotationDegrees(world.getSkyAngle(tickDelta) * 360.0F * 100));
 		
 		RenderSystem.setShaderTexture(0, JUPITER);
 		
 		BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+		
+		matrix4f = matrixStack.peek().getModel();
 		
 		float size = 13.0f;
 		bufferBuilder.xyz(matrix4f, -size, -100.0F, size).uv0(0.0F, 0.0F);
@@ -174,14 +176,18 @@ public class WorldRendererMixin {
 		BufferRenderer.drawWithShader(bufferBuilder.endOrThrow());
 		
 		// saturn
-		matrixStack.rotate(Axis.X_POSITIVE.rotationDegrees(105 - 90));
-		matrixStack.rotate(Axis.Z_POSITIVE.rotationDegrees(-45 + 45));
-		
-		matrix4f = matrixStack.peek().getModel();
+		MatrixStack matrixStack2 = new MatrixStack();
+		matrixStack2.multiply(projectionMatrix);
+		matrixStack2.rotate(Axis.Z_POSITIVE.rotationDegrees(-105));
+		matrixStack2.rotate(Axis.X_POSITIVE.rotationDegrees(35));
+		matrixStack2.rotate(Axis.Y_POSITIVE.rotationDegrees(90));
+		//matrixStack2.rotate(Axis.X_POSITIVE.rotationDegrees(world.getSkyAngle(tickDelta) * 360.0F * 100));
 		
 		RenderSystem.setShaderTexture(0, SATURN);
 		
 		bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+		
+		matrix4f = matrixStack2.peek().getModel();
 		
 		size = 11.0f;
 		bufferBuilder.xyz(matrix4f, -size, -100.0F, size).uv0(0.0F, 0.0F);
