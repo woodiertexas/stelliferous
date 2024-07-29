@@ -71,10 +71,10 @@ public class WorldRendererMixin {
 	
 	private void buildBuffer(Matrix4f matrix4f, float size) {
 		tessellator.method_60827(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-		bufferBuilder.method_22918(matrix4f, -size, -100.0F, size).method_22913(0.0F, 0.0F);
-		bufferBuilder.method_22918(matrix4f, size, -100.0F, size).method_22913(1.0F, 0.0F); // u: 1.0
-		bufferBuilder.method_22918(matrix4f, size, -100.0F, -size).method_22913(1.0F, 1.0F); // u: 1.0, v: 1.0
-		bufferBuilder.method_22918(matrix4f, -size, -100.0F, -size).method_22913(0.0F, 1.0F); // v: 1.0
+		bufferBuilder.xyz(matrix4f, -size, -100.0F, size).uv0(0.0F, 0.0F);
+		bufferBuilder.xyz(matrix4f, size, -100.0F, size).uv0(1.0F, 0.0F); // u: 1.0
+		bufferBuilder.xyz(matrix4f, size, -100.0F, -size).uv0(1.0F, 1.0F); // u: 1.0, v: 1.0
+		bufferBuilder.xyz(matrix4f, -size, -100.0F, -size).uv0(0.0F, 1.0F); // v: 1.0
 	}
 	
 	
@@ -137,32 +137,57 @@ public class WorldRendererMixin {
 	@Unique
 	private static final Identifier JUPITER = Identifier.of(MODID, "textures/environment/jupiter.png");
 	
-	private void renderTheRestOfThePlanet(Identifier planet, MatrixStack matrixStack) {
-		Matrix4f matrix4f = matrixStack.peek().getModel();
-		
-		RenderSystem.setShaderTexture(0, planet);
-		
-		BufferBuilder bufferBuilder = tessellator.method_60827(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-		
-		float size = 20.0f;
-		bufferBuilder.method_22918(matrix4f, -size, -100.0F, size).method_22913(0.0F, 0.0F);
-		bufferBuilder.method_22918(matrix4f, size, -100.0F, size).method_22913(1.0F, 0.0F); // u: 1.0
-		bufferBuilder.method_22918(matrix4f, size, -100.0F, -size).method_22913(1.0F, 1.0F); // u: 1.0, v: 1.0
-		bufferBuilder.method_22918(matrix4f, -size, -100.0F, -size).method_22913(0.0F, 1.0F); // v: 1.0
-		BufferRenderer.drawWithShader(bufferBuilder.method_60800());
-	}
+	@Unique
+	private static final Identifier SATURN = Identifier.of(MODID, "textures/environment/saturn.png");
+	
+	@Unique
+	private static final Identifier NORTH_STAR = Identifier.of("minecraft", "textures/item/nether_star.png");
 	
 	@Inject(method = "renderSky", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getStarBrightness(F)F"))
+	
+	
+	//matrixStack.rotate(Axis.Y_POSITIVE.rotationDegrees(90));
+	
+	//matrixStack.translate(30.0, 0.0, 0.0);
+	//matrixStack.rotate(Axis.X_POSITIVE.rotationDegrees(world.getSkyAngle(tickDelta) * 360.0F * 100));
 	
 	//public void renderSky(Matrix4f projectionMatrix, Matrix4f matrix4f, float tickDelta, Camera preStep, boolean skipRendering, Runnable preRender)
 	private void renderPlanets(Matrix4f projectionMatrix, Matrix4f matrix4f, float tickDelta, Camera preStep, boolean skipRendering, Runnable preRender, CallbackInfo ci) {
 		MatrixStack matrixStack = new MatrixStack();
 		matrixStack.multiply(projectionMatrix);
 		
-		matrixStack.translate(-30.0, 0.0, 40.0);
-		matrixStack.rotate(Axis.Y_POSITIVE.rotation(30.0f));
-		matrixStack.rotate(Axis.Z_POSITIVE.rotationDegrees(world.getSkyAngle(tickDelta) * 360.0F));
+		// jupiter
+		matrixStack.rotate(Axis.X_POSITIVE.rotationDegrees(90));
+		matrixStack.rotate(Axis.Z_POSITIVE.rotationDegrees(-45));
 		
-		renderTheRestOfThePlanet(JUPITER, matrixStack);
+		matrix4f = matrixStack.peek().getModel();
+		
+		RenderSystem.setShaderTexture(0, JUPITER);
+		
+		BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+		
+		float size = 13.0f;
+		bufferBuilder.xyz(matrix4f, -size, -100.0F, size).uv0(0.0F, 0.0F);
+		bufferBuilder.xyz(matrix4f, size, -100.0F, size).uv0(1.0F, 0.0F); // u: 1.0
+		bufferBuilder.xyz(matrix4f, size, -100.0F, -size).uv0(1.0F, 1.0F); // u: 1.0, v: 1.0
+		bufferBuilder.xyz(matrix4f, -size, -100.0F, -size).uv0(0.0F, 1.0F); // v: 1.0
+		BufferRenderer.drawWithShader(bufferBuilder.endOrThrow());
+		
+		// saturn
+		matrixStack.rotate(Axis.X_POSITIVE.rotationDegrees(105 - 90));
+		matrixStack.rotate(Axis.Z_POSITIVE.rotationDegrees(-45 + 45));
+		
+		matrix4f = matrixStack.peek().getModel();
+		
+		RenderSystem.setShaderTexture(0, SATURN);
+		
+		bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+		
+		size = 11.0f;
+		bufferBuilder.xyz(matrix4f, -size, -100.0F, size).uv0(0.0F, 0.0F);
+		bufferBuilder.xyz(matrix4f, size, -100.0F, size).uv0(1.0F, 0.0F); // u: 1.0
+		bufferBuilder.xyz(matrix4f, size, -100.0F, -size).uv0(1.0F, 1.0F); // u: 1.0, v: 1.0
+		bufferBuilder.xyz(matrix4f, -size, -100.0F, -size).uv0(0.0F, 1.0F); // v: 1.0
+		BufferRenderer.drawWithShader(bufferBuilder.endOrThrow());
 	}
 }
