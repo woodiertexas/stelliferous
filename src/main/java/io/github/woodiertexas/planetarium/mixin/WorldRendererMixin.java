@@ -135,6 +135,9 @@ public class WorldRendererMixin {
 	Tessellator tessellator = Tessellator.getInstance();
 	
 	@Unique
+	private static final Identifier MARS = Identifier.of(MODID, "textures/environment/mars.png");
+	
+	@Unique
 	private static final Identifier JUPITER = Identifier.of(MODID, "textures/environment/jupiter.png");
 	
 	@Unique
@@ -143,57 +146,31 @@ public class WorldRendererMixin {
 	@Unique
 	private static final Identifier NORTH_STAR = Identifier.of("minecraft", "textures/item/nether_star.png");
 	
-	@Inject(method = "renderSky", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getStarBrightness(F)F"))
-	
-	
-	//matrixStack.rotate(Axis.Y_POSITIVE.rotationDegrees(90));
-	
-	//matrixStack.translate(30.0, 0.0, 0.0);
-	//matrixStack.rotate(Axis.X_POSITIVE.rotationDegrees(world.getSkyAngle(tickDelta) * 360.0F * 100));
-	
-	//public void renderSky(Matrix4f projectionMatrix, Matrix4f matrix4f, float tickDelta, Camera preStep, boolean skipRendering, Runnable preRender)
-	private void renderPlanets(Matrix4f projectionMatrix, Matrix4f matrix4f, float tickDelta, Camera preStep, boolean skipRendering, Runnable preRender, CallbackInfo ci) {
-		MatrixStack matrixStack = new MatrixStack();
-		matrixStack.multiply(projectionMatrix);
+	@Unique
+	private void renderPlanet(MatrixStack matrices, Identifier planet, float xRot, float yRot, float zRot, float size, float tickDelta) {
+		matrices.push();
+		matrices.rotate(Axis.X_POSITIVE.rotationDegrees(xRot));
+		matrices.rotate(Axis.Z_POSITIVE.rotationDegrees(world.getSkyAngle(tickDelta) * 360.0F * 100 + zRot));
+		matrices.rotate(Axis.Y_POSITIVE.rotationDegrees(yRot));
 		
-		// jupiter
-		matrixStack.rotate(Axis.Z_POSITIVE.rotationDegrees(-90));
-		matrixStack.rotate(Axis.X_POSITIVE.rotationDegrees(45));
-		matrixStack.rotate(Axis.Y_POSITIVE.rotationDegrees(-90));
-		//matrixStack.rotate(Axis.X_POSITIVE.rotationDegrees(world.getSkyAngle(tickDelta) * 360.0F * 100));
-		
-		RenderSystem.setShaderTexture(0, JUPITER);
-		
+		Matrix4f matrix4f = matrices.peek().getModel();
+		RenderSystem.setShaderTexture(0, planet);
 		BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-		
-		matrix4f = matrixStack.peek().getModel();
-		
-		float size = 13.0f;
 		bufferBuilder.xyz(matrix4f, -size, -100.0F, size).uv0(0.0F, 0.0F);
 		bufferBuilder.xyz(matrix4f, size, -100.0F, size).uv0(1.0F, 0.0F); // u: 1.0
 		bufferBuilder.xyz(matrix4f, size, -100.0F, -size).uv0(1.0F, 1.0F); // u: 1.0, v: 1.0
 		bufferBuilder.xyz(matrix4f, -size, -100.0F, -size).uv0(0.0F, 1.0F); // v: 1.0
 		BufferRenderer.drawWithShader(bufferBuilder.endOrThrow());
 		
-		// saturn
-		MatrixStack matrixStack2 = new MatrixStack();
-		matrixStack2.multiply(projectionMatrix);
-		matrixStack2.rotate(Axis.Z_POSITIVE.rotationDegrees(-105));
-		matrixStack2.rotate(Axis.X_POSITIVE.rotationDegrees(35));
-		matrixStack2.rotate(Axis.Y_POSITIVE.rotationDegrees(90));
-		//matrixStack2.rotate(Axis.X_POSITIVE.rotationDegrees(world.getSkyAngle(tickDelta) * 360.0F * 100));
+		matrices.pop();
+	}
+	@Inject(method = "renderSky", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getStarBrightness(F)F"))
+	private void renderCelestialObjects(Matrix4f modelViewMatrix, Matrix4f projectionMatrix, float tickDelta, Camera preStep, boolean skipRendering, Runnable preRender, CallbackInfo ci) {
+		MatrixStack matrices = new MatrixStack();
+		matrices.multiply(modelViewMatrix);
 		
-		RenderSystem.setShaderTexture(0, SATURN);
-		
-		bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-		
-		matrix4f = matrixStack2.peek().getModel();
-		
-		size = 11.0f;
-		bufferBuilder.xyz(matrix4f, -size, -100.0F, size).uv0(0.0F, 0.0F);
-		bufferBuilder.xyz(matrix4f, size, -100.0F, size).uv0(1.0F, 0.0F); // u: 1.0
-		bufferBuilder.xyz(matrix4f, size, -100.0F, -size).uv0(1.0F, 1.0F); // u: 1.0, v: 1.0
-		bufferBuilder.xyz(matrix4f, -size, -100.0F, -size).uv0(0.0F, 1.0F); // v: 1.0
-		BufferRenderer.drawWithShader(bufferBuilder.endOrThrow());
+		renderPlanet(matrices, MARS, 0, 45, 0, 13.0f, tickDelta);
+		renderPlanet(matrices, JUPITER, 55, 0, 0, 13.0f, tickDelta);
+		renderPlanet(matrices, SATURN, 45, 0, 15, 13.0f, tickDelta);
 	}
 }
