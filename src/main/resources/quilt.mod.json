@@ -9,6 +9,7 @@
 			"description": "Renders solar system planets in Minecraft's skybox at night.",
 			"contributors": {
 				"woodiertexas": "Author",
+				"OroArmor": "Contributor",
 				"gayasslily": "Planet Artist",
 				"crackers0106": "Planet Artist"
 			},
@@ -27,12 +28,11 @@
 				"versions": ">=0.26.0"
 			},
 			{
-				"id": "quilted_fabric_api",
-				"versions": ">=5.0.0-"
+				"id": "quilted_fabric_resource_loader_v0"
 			},
 			{
 				"id": "minecraft",
-				"versions": ">=1.19.3"
+				"versions": ">=1.21"
 			}
 		]
 	},
