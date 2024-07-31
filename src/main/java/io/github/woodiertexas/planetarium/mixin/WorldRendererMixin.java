@@ -1,18 +1,12 @@
 package io.github.woodiertexas.planetarium.mixin;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferRenderer;
-import com.mojang.blaze3d.vertex.Tessellator;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormats;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Axis;
-import net.minecraft.world.World;
+
+import io.github.woodiertexas.planetarium.Planetarium;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
@@ -132,9 +126,6 @@ public class WorldRendererMixin {
 	private @Nullable ClientWorld world;
 	
 	@Unique
-	Tessellator tessellator = Tessellator.getInstance();
-	
-	@Unique
 	private static final Identifier MARS = Identifier.of(MODID, "textures/environment/mars.png");
 	
 	@Unique
@@ -145,32 +136,14 @@ public class WorldRendererMixin {
 	
 	@Unique
 	private static final Identifier NORTH_STAR = Identifier.of("minecraft", "textures/item/nether_star.png");
-	
-	@Unique
-	private void renderPlanet(MatrixStack matrices, Identifier planet, float xRot, float yRot, float zRot, float size, float tickDelta) {
-		matrices.push();
-		matrices.rotate(Axis.X_POSITIVE.rotationDegrees(xRot));
-		matrices.rotate(Axis.Z_POSITIVE.rotationDegrees(world.getSkyAngle(tickDelta) * 360.0F * 100 + zRot));
-		matrices.rotate(Axis.Y_POSITIVE.rotationDegrees(yRot));
-		
-		Matrix4f matrix4f = matrices.peek().getModel();
-		RenderSystem.setShaderTexture(0, planet);
-		BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-		bufferBuilder.xyz(matrix4f, -size, -100.0F, size).uv0(0.0F, 0.0F);
-		bufferBuilder.xyz(matrix4f, size, -100.0F, size).uv0(1.0F, 0.0F); // u: 1.0
-		bufferBuilder.xyz(matrix4f, size, -100.0F, -size).uv0(1.0F, 1.0F); // u: 1.0, v: 1.0
-		bufferBuilder.xyz(matrix4f, -size, -100.0F, -size).uv0(0.0F, 1.0F); // v: 1.0
-		BufferRenderer.drawWithShader(bufferBuilder.endOrThrow());
-		
-		matrices.pop();
-	}
+
 	@Inject(method = "renderSky", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getStarBrightness(F)F"))
 	private void renderCelestialObjects(Matrix4f modelViewMatrix, Matrix4f projectionMatrix, float tickDelta, Camera preStep, boolean skipRendering, Runnable preRender, CallbackInfo ci) {
 		MatrixStack matrices = new MatrixStack();
 		matrices.multiply(modelViewMatrix);
 		
-		renderPlanet(matrices, MARS, 0, 45, 0, 13.0f, tickDelta);
-		renderPlanet(matrices, JUPITER, 55, 0, 0, 13.0f, tickDelta);
-		renderPlanet(matrices, SATURN, 45, 0, 15, 13.0f, tickDelta);
+		Planetarium.renderPlanet(matrices, MARS, 0, 45, 0, 13.0f, tickDelta, world);
+		Planetarium.renderPlanet(matrices, JUPITER, 55, 0, 0, 13.0f, tickDelta, world);
+		Planetarium.renderPlanet(matrices, SATURN, 45, 0, 15, 13.0f, tickDelta, world);
 	}
 }
