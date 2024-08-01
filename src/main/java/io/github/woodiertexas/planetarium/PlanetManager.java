@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.data.client.model.Texture;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
@@ -23,7 +24,7 @@ import java.util.Map;
 public class PlanetManager{
 	private static final Logger LOGGER = LoggerFactory.getLogger("Planetarium Planet Manager");
 	// "texture" is a placeholder
-	private Map<Identifier, Texture> planets;
+	private Map<Identifier, Planet> planets;
 	
 	public @Nullable Texture getPlanet(Identifier id) {
 		this.planets.get(id);
@@ -32,7 +33,7 @@ public class PlanetManager{
 	public static class PlanetLoader {
 		private final ResourceManager manager;
 		private final Profiler profiler;
-		private final Map<Identifier, Texture> planets = new HashMap<>();
+		private final Map<Identifier, Planet> planets = new HashMap<>();
 		
 		public PlanetLoader(ResourceManager manager, Profiler profile) {
 			this.manager = manager;
@@ -60,10 +61,10 @@ public class PlanetManager{
 			}
 			
 			JsonObject json = JsonHelper.deserialize(reader);
-			DataResult<Pair<Texture, JsonElement>> result = ok what the fuck?
+			DataResult<Pair<Planet, JsonElement>> result = Planetarium.PLANET.decode(JsonOps.INSTANCE, json);
 			
 			if (result.error().isPresent()) {
-				LOGGER.error(String.format("Unable to parse animation file %s.\nReason: %s", id, result.error().get().message()));
+				LOGGER.error(String.format("Could not parse animation file %s.\nReason: %s", id, result.error().get().message()));
 				return;
 			}
 			

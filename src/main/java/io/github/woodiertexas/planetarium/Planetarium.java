@@ -1,5 +1,7 @@
 package io.github.woodiertexas.planetarium;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.math.MathHelper;
 import org.joml.Matrix4f;
 import org.slf4j.Logger;
@@ -20,7 +22,16 @@ import net.minecraft.util.math.Axis;
 public class Planetarium {
 	public static final Logger LOGGER = LoggerFactory.getLogger("Planetarium");
 	public static final String MOD_ID = "planetarium";
-
+	
+	public static final Codec<Planet> PLANET = RecordCodecBuilder.create(instance ->
+		instance.group(
+			Codec.floatRange(-180, 180).fieldOf("procession").forGetter(Planet::procession),
+			Codec.floatRange(-180, 180).fieldOf("tilt").forGetter(Planet::tilt),
+			Codec.floatRange(-180, 180).fieldOf("texture_rotation").forGetter(Planet::texture_rotation),
+			Codec.floatRange(1, Integer.MAX_VALUE).fieldOf("size").forGetter(Planet::size)
+		).apply(instance, Planet::new)
+	);
+	
 	public static void renderPlanet(MatrixStack matrices, Identifier planet, float procession, float tilt, float rotation, float size, float tickDelta, ClientWorld world) {
 		matrices.push();
 
