@@ -23,6 +23,7 @@ public class Planetarium {
 	public static final Logger LOGGER = LoggerFactory.getLogger("Planetarium");
 	public static final String MOD_ID = "planetarium";
 	
+	/*
 	public static final Codec<Planet> PLANET = RecordCodecBuilder.create(instance ->
 		instance.group(
 			Codec.floatRange(-180, 180).fieldOf("procession").forGetter(Planet::procession),
@@ -31,6 +32,7 @@ public class Planetarium {
 			Codec.floatRange(1, Integer.MAX_VALUE).fieldOf("size").forGetter(Planet::size)
 		).apply(instance, Planet::new)
 	);
+	 */
 	
 	public static void renderPlanet(MatrixStack matrices, Identifier planet, float procession, float tilt, float rotation, float size, float tickDelta, ClientWorld world) {
 		matrices.push();
