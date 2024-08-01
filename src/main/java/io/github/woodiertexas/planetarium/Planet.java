@@ -1,3 +1,4 @@
+/*
 package io.github.woodiertexas.planetarium;
 
 public record Planet(float procession, float tilt, float texture_rotation, float size) {
@@ -21,3 +22,4 @@ public record Planet(float procession, float tilt, float texture_rotation, float
 		return this.size;
 	}
 }
+ */
