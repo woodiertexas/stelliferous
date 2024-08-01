@@ -9,6 +9,7 @@ import net.minecraft.util.Identifier;
 import io.github.woodiertexas.planetarium.Planetarium;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
+import org.quiltmc.loader.api.QuiltLoader;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -16,38 +17,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static io.github.woodiertexas.planetarium.Planetarium.MODID;
+import static io.github.woodiertexas.planetarium.Planetarium.MOD_ID;
 
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
 	/*
-	@Shadow
-	private @Nullable ClientWorld world;
-	
-	@Unique
-	private static final Identifier MERCURY = Identifier.of(MODID, "textures/environment/mercury.png");
-	
-	@Unique
-	private static final Identifier VENUS = Identifier.of(MODID, "textures/environment/venus.png");
-	
-	@Unique
-	private static final Identifier MARS = Identifier.of(MODID, "textures/environment/mars.png");
-	
-	@Unique
-	private static final Identifier JUPITER = Identifier.of(MODID, "textures/environment/jupiter.png");
-	
-	@Unique
-	private static final Identifier SATURN = Identifier.of(MODID, "textures/environment/saturn.png");
-	
-	@Unique
-	private static final Identifier URANUS = Identifier.of(MODID, "textures/environment/uranus.png");
-	
-	@Unique
-	private static final Identifier NEPTUNE = Identifier.of(MODID, "textures/environment/neptune.png");
-	
-	@Unique
-	private static final Identifier NORTH_STAR = Identifier.of("minecraft", "textures/item/nether_star.png");
-	
 	@Unique
 	Tessellator tessellator = Tessellator.getInstance();
 	
@@ -96,54 +70,43 @@ public class WorldRendererMixin {
 		
 		matrices.pop();
 	}
-	
-	
-	@Unique
-	private void renderStar(Identifier star, float starSize, MatrixStack matrices, float tickDelta, float brightness) {
-		matrices.push();
-		matrices.rotate(Axis.Y_NEGATIVE.rotationDegrees(20.0f));
-		matrices.rotate(Axis.Z_NEGATIVE.rotationDegrees(75.0f));
-		Matrix4f matrix4f = matrices.peek().getModel();
-		
-		if (world.getTimeOfDay() % 24000L >= 11800) {
-			RenderSystem.setShaderTexture(0, star);
-			
-			buildBuffer(matrix4f, starSize);
-			fade(tickDelta, brightness);
-			
-			BufferRenderer.drawWithShader(bufferBuilder.method_60800());
-		} else {
-			RenderSystem.setShaderTexture(0, 0);
-			tessellator.method_60827(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-			BufferRenderer.drawWithShader(bufferBuilder.method_60800());
-		}
-		
-		matrices.pop();
-	}
-	*/
+*/
 	
 	@Shadow
 	private @Nullable ClientWorld world;
 	
 	@Unique
-	private static final Identifier MARS = Identifier.of(MODID, "textures/environment/mars.png");
+	private static final Identifier MERCURY = Identifier.of(MOD_ID, "textures/environment/mercury.png");
 	
 	@Unique
-	private static final Identifier JUPITER = Identifier.of(MODID, "textures/environment/jupiter.png");
+	private static final Identifier VENUS = Identifier.of(MOD_ID, "textures/environment/venus.png");
 	
 	@Unique
-	private static final Identifier SATURN = Identifier.of(MODID, "textures/environment/saturn.png");
+	private static final Identifier MARS = Identifier.of(MOD_ID, "textures/environment/mars.png");
+	
+	@Unique
+	private static final Identifier JUPITER = Identifier.of(MOD_ID, "textures/environment/jupiter.png");
+	
+	@Unique
+	private static final Identifier SATURN = Identifier.of(MOD_ID, "textures/environment/saturn.png");
+	
+	@Unique
+	private static final Identifier URANUS = Identifier.of(MOD_ID, "textures/environment/uranus.png");
+	
+	@Unique
+	private static final Identifier NEPTUNE = Identifier.of(MOD_ID, "textures/environment/neptune.png");
 	
 	@Unique
 	private static final Identifier NORTH_STAR = Identifier.of("minecraft", "textures/item/nether_star.png");
-
+	
 	@Inject(method = "renderSky", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getStarBrightness(F)F"))
 	private void renderCelestialObjects(Matrix4f modelViewMatrix, Matrix4f projectionMatrix, float tickDelta, Camera preStep, boolean skipRendering, Runnable preRender, CallbackInfo ci) {
 		MatrixStack matrices = new MatrixStack();
 		matrices.multiply(modelViewMatrix);
 		
-		Planetarium.renderPlanet(matrices, MARS, 0, 45, 0, 13.0f, tickDelta, world);
-		Planetarium.renderPlanet(matrices, JUPITER, 55, 0, 0, 13.0f, tickDelta, world);
-		Planetarium.renderPlanet(matrices, SATURN, 45, 0, 15, 13.0f, tickDelta, world);
+		assert world != null;
+		Planetarium.renderPlanet(matrices, MARS, 0, 45, 25.2f, 13.0f, tickDelta, world);
+		Planetarium.renderPlanet(matrices, JUPITER, 0, -45, 0, 13.0f, tickDelta, world);
+		Planetarium.renderPlanet(matrices, SATURN, 0, 15, 15, 13.0f, tickDelta, world);
 	}
 }

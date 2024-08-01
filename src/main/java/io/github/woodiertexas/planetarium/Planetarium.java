@@ -1,5 +1,6 @@
 package io.github.woodiertexas.planetarium;
 
+import net.minecraft.util.math.MathHelper;
 import org.joml.Matrix4f;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,7 @@ import net.minecraft.util.math.Axis;
 
 public class Planetarium {
 	public static final Logger LOGGER = LoggerFactory.getLogger("Planetarium");
-	public static final String MODID = "planetarium";
+	public static final String MOD_ID = "planetarium";
 
 	public static void renderPlanet(MatrixStack matrices, Identifier planet, float procession, float tilt, float rotation, float size, float tickDelta, ClientWorld world) {
 		matrices.push();
@@ -34,16 +35,24 @@ public class Planetarium {
 
 		// Finally, change the rotation of the planet texture
 		matrices.rotate(Axis.Y_POSITIVE.rotationDegrees(rotation));
-
-		Matrix4f matrix4f = matrices.peek().getModel();
-		RenderSystem.setShaderTexture(0, planet);
-		BufferBuilder bufferBuilder = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-		bufferBuilder.xyz(matrix4f, -size, 99.0F, -size).uv0(0.0F, 0.0F);
-		bufferBuilder.xyz(matrix4f, size, 99.0F, -size).uv0(1.0F, 0.0F); // u: 1.0
-		bufferBuilder.xyz(matrix4f, size, 99.0F, size).uv0(1.0F, 1.0F); // u: 1.0, v: 1.0
-		bufferBuilder.xyz(matrix4f, -size, 99.0F, size).uv0(0.0F, 1.0F); // v: 1.0
-		BufferRenderer.drawWithShader(bufferBuilder.endOrThrow());
 		
+		if (world.getTimeOfDay() % 24000L >= 11800) {
+			Matrix4f matrix4f = matrices.peek().getModel();
+			RenderSystem.setShaderTexture(0, planet);
+			BufferBuilder bufferBuilder = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+			bufferBuilder.xyz(matrix4f, -size, 99.0F, -size).uv0(0.0F, 0.0F);
+			bufferBuilder.xyz(matrix4f, size, 99.0F, -size).uv0(1.0F, 0.0F); // u: 1.0
+			bufferBuilder.xyz(matrix4f, size, 99.0F, size).uv0(1.0F, 1.0F); // u: 1.0, v: 1.0
+			bufferBuilder.xyz(matrix4f, -size, 99.0F, size).uv0(0.0F, 1.0F); // v: 1.0
+			
+			float rainGradient = 1.0f - world.getRainGradient(tickDelta);
+			float transparency = 2 * world.getStarBrightness(tickDelta) * rainGradient;
+			if (transparency > 0.0f) {
+				RenderSystem.setShaderColor(transparency, transparency, transparency, transparency);
+			}
+			
+			BufferRenderer.drawWithShader(bufferBuilder.endOrThrow());
+		}
 		matrices.pop();
 	}
 }
