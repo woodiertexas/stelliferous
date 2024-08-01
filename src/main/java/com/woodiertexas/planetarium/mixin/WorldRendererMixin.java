@@ -16,6 +16,8 @@ import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
+import org.slf4j.Logger;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -25,11 +27,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
 
+import static com.woodiertexas.planetarium.Planetarium.MOD_ID;
+
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
 	@Shadow
 	private @Nullable ClientWorld world;
 	
+	@Shadow
+	@Final
+	private static Logger LOGGER;
 	@Unique
 	private PlanetManager planetarium$planetManager;
 	
@@ -45,9 +52,10 @@ public class WorldRendererMixin {
 		matrices.multiply(modelViewMatrix);
 		
 		assert world != null;
+		Planetarium.LOGGER.info("start rendering planets");
 		for (Map.Entry<Identifier, Planet> planet : planetarium$planetManager.getPlanets().entrySet()) {
 			Planet planetInfo = planet.getValue();
-			Planetarium.renderPlanet(matrices, planet.getKey(), planetInfo.procession(), planetInfo.tilt(), planetInfo.texture_rotation(), planetInfo.size(), tickDelta, world);
+			Planetarium.renderPlanet(matrices, Identifier.of(planet.getKey().getNamespace(), "textures/planetarium/planets/" + planet.getKey().getPath()), planetInfo.procession(), planetInfo.tilt(), planetInfo.texture_rotation(), planetInfo.size(), tickDelta, world);
 		}
 	}
 }

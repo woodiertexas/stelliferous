@@ -58,7 +58,7 @@ public class PlanetManager implements SimpleResourceReloadListener<PlanetManager
 		
 		private void loadPlanets() {
 			this.profiler.push("Load Planets");
-			Map<Identifier, Resource> resources = this.manager.findResources("planets", id -> id.getPath().endsWith(".json"));
+			Map<Identifier, Resource> resources = this.manager.findResources("planetarium/planets", id -> id.getPath().endsWith(".json"));
 			for (Map.Entry<Identifier, Resource> resourceEntry : resources.entrySet()) {
 				this.addPlanet(resourceEntry.getKey(), resourceEntry.getValue());
 			}
