@@ -1,10 +1,19 @@
 package com.woodiertexas.planetarium.mixin;
 
+import com.woodiertexas.planetarium.PlanetManager;
 import com.woodiertexas.planetarium.Planetarium;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.texture.atlas.SpriteResourceLoader;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
@@ -45,6 +54,16 @@ public class WorldRendererMixin {
 	
 	@Unique
 	private static final Identifier NORTH_STAR = Identifier.of("minecraft", "textures/item/nether_star.png");
+	
+	
+	@Unique
+	private PlanetManager planetarium$planetManager;
+	
+	@Inject(method = "<init>", at = @At("TAIL"))
+	private void createPlanetManager(MinecraftClient client, EntityRenderDispatcher entityRenderDispatcher, BlockEntityRenderDispatcher blockEntityDispatcher, BufferBuilderStorage bufferBuilders, CallbackInfo ci) {
+		this.planetarium$planetManager = new PlanetManager();
+		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(this.planetarium$planetManager);
+	}
 	
 	@Inject(method = "renderSky", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getStarBrightness(F)F"))
 	private void renderCelestialObjects(Matrix4f modelViewMatrix, Matrix4f projectionMatrix, float tickDelta, Camera preStep, boolean skipRendering, Runnable preRender, CallbackInfo ci) {
