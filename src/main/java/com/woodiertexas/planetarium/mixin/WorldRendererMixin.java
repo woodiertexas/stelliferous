@@ -52,7 +52,6 @@ public class WorldRendererMixin {
 		matrices.multiply(modelViewMatrix);
 		
 		assert world != null;
-		Planetarium.LOGGER.info("start rendering planets");
 		for (Map.Entry<Identifier, Planet> planet : planetarium$planetManager.getPlanets().entrySet()) {
 			Planet planetInfo = planet.getValue();
 			Planetarium.renderPlanet(matrices, Identifier.of(planet.getKey().getNamespace(), "textures/planetarium/planets/" + planet.getKey().getPath()), planetInfo.procession(), planetInfo.tilt(), planetInfo.texture_rotation(), planetInfo.size(), tickDelta, world);

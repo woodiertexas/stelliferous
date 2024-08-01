@@ -84,7 +84,8 @@ public class PlanetManager implements SimpleResourceReloadListener<PlanetManager
 				return;
 			}
 			
-			Identifier planetId = Identifier.of(MOD_ID, id.getPath().substring("planets/".length()));
+			String path = id.getPath().substring("planetarium/planets/".length());
+			Identifier planetId = Identifier.of(id.getNamespace(), path.substring(0, path.length() - 5));
 			this.planets.put(planetId, result.result().get().getFirst());
 		}
 		
