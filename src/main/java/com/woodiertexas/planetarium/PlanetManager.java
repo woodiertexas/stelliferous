@@ -11,7 +11,6 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.profiler.Profiler;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,8 +27,8 @@ public class PlanetManager implements SimpleResourceReloadListener<PlanetManager
 	private static final Logger LOGGER = LoggerFactory.getLogger("Planetarium Planet Manager");
 	private Map<Identifier, Planet> planets;
 	
-	public @Nullable Planet getPlanet(Identifier id) {
-		return this.planets.get(id);
+	public Map<Identifier, Planet> getPlanets() {
+		return planets;
 	}
 	
 	public CompletableFuture<PlanetLoader> load(ResourceManager manager, Profiler profiler, Executor executor) {
