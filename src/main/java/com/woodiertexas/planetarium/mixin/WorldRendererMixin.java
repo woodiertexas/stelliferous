@@ -1,5 +1,6 @@
 package com.woodiertexas.planetarium.mixin;
 
+import com.woodiertexas.planetarium.Planet;
 import com.woodiertexas.planetarium.PlanetManager;
 import com.woodiertexas.planetarium.Planetarium;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -9,10 +10,8 @@ import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.texture.atlas.SpriteResourceLoader;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -24,37 +23,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.woodiertexas.planetarium.Planetarium.MOD_ID;
+import java.util.Map;
 
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
 	@Shadow
 	private @Nullable ClientWorld world;
-	
-	@Unique
-	private static final Identifier MERCURY = Identifier.of(MOD_ID, "textures/environment/mercury.png");
-	
-	@Unique
-	private static final Identifier VENUS = Identifier.of(MOD_ID, "textures/environment/venus.png");
-	
-	@Unique
-	private static final Identifier MARS = Identifier.of(MOD_ID, "textures/environment/mars.png");
-	
-	@Unique
-	private static final Identifier JUPITER = Identifier.of(MOD_ID, "textures/environment/jupiter.png");
-	
-	@Unique
-	private static final Identifier SATURN = Identifier.of(MOD_ID, "textures/environment/saturn.png");
-	
-	@Unique
-	private static final Identifier URANUS = Identifier.of(MOD_ID, "textures/environment/uranus.png");
-	
-	@Unique
-	private static final Identifier NEPTUNE = Identifier.of(MOD_ID, "textures/environment/neptune.png");
-	
-	@Unique
-	private static final Identifier NORTH_STAR = Identifier.of("minecraft", "textures/item/nether_star.png");
-	
 	
 	@Unique
 	private PlanetManager planetarium$planetManager;
@@ -71,8 +45,9 @@ public class WorldRendererMixin {
 		matrices.multiply(modelViewMatrix);
 		
 		assert world != null;
-		Planetarium.renderPlanet(matrices, MARS, 90, 0, 25.2f, 750.0f, tickDelta, world);
-		Planetarium.renderPlanet(matrices, JUPITER, 0, -45, 0, 13.0f, tickDelta, world);
-		Planetarium.renderPlanet(matrices, SATURN, 0, 15, 15, 13.0f, tickDelta, world);
+		for (Map.Entry<Identifier, Planet> planet : planetarium$planetManager.getPlanets().entrySet()) {
+			Planet planetInfo = planet.getValue();
+			Planetarium.renderPlanet(matrices, planet.getKey(), planetInfo.procession(), planetInfo.tilt(), planetInfo.texture_rotation(), planetInfo.size(), tickDelta, world);
+		}
 	}
 }
