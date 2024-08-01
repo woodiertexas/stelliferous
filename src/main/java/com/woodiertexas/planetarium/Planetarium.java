@@ -23,12 +23,23 @@ public class Planetarium {
 	/*
 	public static final Codec<Planet> PLANET = RecordCodecBuilder.create(instance ->
 		instance.group(
-			Codec.floatRange(-180, 180).fieldOf("procession").forGetter(Planet::procession),
-			Codec.floatRange(-180, 180).fieldOf("tilt").forGetter(Planet::tilt),
-			Codec.floatRange(-180, 180).fieldOf("texture_rotation").forGetter(Planet::texture_rotation),
+			Codec.floatRange(-360, 360).fieldOf("procession").forGetter(Planet::procession),
+			Codec.floatRange(-360, 360).fieldOf("tilt").forGetter(Planet::tilt),
+			Codec.floatRange(-360, 360).fieldOf("texture_rotation").forGetter(Planet::texture_rotation),
 			Codec.floatRange(1, Integer.MAX_VALUE).fieldOf("size").forGetter(Planet::size)
 		).apply(instance, Planet::new)
 	);
+	 */
+	
+	/**
+	 * @param matrices
+	 * @param planet The planet itself. (Ex: Mercury, Venus, Earth, and so on)
+	 * @param procession How far along in orbit the planet is.
+	 * @param tilt The orbital tilt of the planet.
+	 * @param rotation The rotation of the planet's texture.
+	 * @param size The planet's size. (1.0 = very small, 20.0 = big)
+	 * @param tickDelta Time between ticks.
+	 * @param world
 	 */
 	
 	public static void renderPlanet(MatrixStack matrices, Identifier planet, float procession, float tilt, float rotation, float size, float tickDelta, ClientWorld world) {
