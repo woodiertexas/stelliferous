@@ -1,4 +1,4 @@
-package io.github.woodiertexas.planetarium.mixin;
+package com.woodiertexas.planetarium.mixin;
 
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.WorldRenderer;
@@ -6,10 +6,9 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
 
-import io.github.woodiertexas.planetarium.Planetarium;
+import com.woodiertexas.planetarium.Planetarium;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
-import org.quiltmc.loader.api.QuiltLoader;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -17,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static io.github.woodiertexas.planetarium.Planetarium.MOD_ID;
+import static com.woodiertexas.planetarium.Planetarium.MOD_ID;
 
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {

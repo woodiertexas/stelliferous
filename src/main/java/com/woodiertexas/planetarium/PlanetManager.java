@@ -1,5 +1,5 @@
 /*
-package io.github.woodiertexas.planetarium;
+package com.woodiertexas.planetarium;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-import static io.github.woodiertexas.planetarium.Planetarium.MOD_ID;
+import static com.woodiertexas.planetarium.Planetarium.MOD_ID;
 
 public class PlanetManager implements ResourceReloader<PlanetManager.PlanetLoader> {
 	private static final Logger LOGGER = LoggerFactory.getLogger("Planetarium Planet Manager");

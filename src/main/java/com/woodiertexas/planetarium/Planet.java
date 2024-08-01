@@ -1,5 +1,5 @@
 /*
-package io.github.woodiertexas.planetarium;
+package com.woodiertexas.planetarium;
 
 public record Planet(float procession, float tilt, float texture_rotation, float size) {
 	@Override

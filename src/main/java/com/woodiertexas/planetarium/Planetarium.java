@@ -1,8 +1,5 @@
-package io.github.woodiertexas.planetarium;
+package com.woodiertexas.planetarium;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.math.MathHelper;
 import org.joml.Matrix4f;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
