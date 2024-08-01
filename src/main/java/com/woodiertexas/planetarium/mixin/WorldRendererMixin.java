@@ -1,12 +1,11 @@
 package com.woodiertexas.planetarium.mixin;
 
+import com.woodiertexas.planetarium.Planetarium;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
-
-import com.woodiertexas.planetarium.Planetarium;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
@@ -53,7 +52,7 @@ public class WorldRendererMixin {
 		matrices.multiply(modelViewMatrix);
 		
 		assert world != null;
-		Planetarium.renderPlanet(matrices, MARS, 0, 45, 25.2f, 13.0f, tickDelta, world);
+		Planetarium.renderPlanet(matrices, MARS, 90, 0, 25.2f, 750.0f, tickDelta, world);
 		Planetarium.renderPlanet(matrices, JUPITER, 0, -45, 0, 13.0f, tickDelta, world);
 		Planetarium.renderPlanet(matrices, SATURN, 0, 15, 15, 13.0f, tickDelta, world);
 	}

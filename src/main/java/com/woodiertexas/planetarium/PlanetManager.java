@@ -1,4 +1,3 @@
-/*
 package com.woodiertexas.planetarium;
 
 import com.google.gson.JsonElement;
@@ -6,11 +5,9 @@ import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.client.texture.atlas.SpriteResourceLoader;
+import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceReloader;
-import net.minecraft.resource.SimpleResourceReload;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.profiler.Profiler;
@@ -27,7 +24,7 @@ import java.util.concurrent.Executor;
 
 import static com.woodiertexas.planetarium.Planetarium.MOD_ID;
 
-public class PlanetManager implements ResourceReloader<PlanetManager.PlanetLoader> {
+public class PlanetManager implements SimpleResourceReloadListener<PlanetManager.PlanetLoader> {
 	private static final Logger LOGGER = LoggerFactory.getLogger("Planetarium Planet Manager");
 	private Map<Identifier, Planet> planets;
 	
@@ -42,6 +39,11 @@ public class PlanetManager implements ResourceReloader<PlanetManager.PlanetLoade
 	public CompletableFuture<Void> apply(PlanetLoader prepared, ResourceManager manager, Profiler profiler, Executor executor) {
 		this.planets = prepared.getPlanets();
 		return CompletableFuture.runAsync(() -> {});
+	}
+	
+	@Override
+	public Identifier getFabricId() {
+		return Identifier.of("planetarium", "planet_reloader");
 	}
 	
 	public static class PlanetLoader {
@@ -83,7 +85,7 @@ public class PlanetManager implements ResourceReloader<PlanetManager.PlanetLoade
 				return;
 			}
 			
-			Identifier planetId = new Identifier(MOD_ID, id.getPath().substring("planets/".length()));
+			Identifier planetId = Identifier.of(MOD_ID, id.getPath().substring("planets/".length()));
 			this.planets.put(planetId, result.result().get().getFirst());
 		}
 		
@@ -92,4 +94,3 @@ public class PlanetManager implements ResourceReloader<PlanetManager.PlanetLoade
 		}
 	}
 }
- */

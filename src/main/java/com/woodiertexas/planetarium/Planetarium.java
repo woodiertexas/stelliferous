@@ -1,35 +1,33 @@
 package com.woodiertexas.planetarium;
 
-import org.joml.Matrix4f;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.BufferRenderer;
 import com.mojang.blaze3d.vertex.Tessellator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormats;
-
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Axis;
+import org.joml.Matrix4f;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Planetarium {
 	public static final Logger LOGGER = LoggerFactory.getLogger("Planetarium");
 	public static final String MOD_ID = "planetarium";
 	
-	/*
 	public static final Codec<Planet> PLANET = RecordCodecBuilder.create(instance ->
 		instance.group(
-			Codec.floatRange(-360, 360).fieldOf("procession").forGetter(Planet::procession),
-			Codec.floatRange(-360, 360).fieldOf("tilt").forGetter(Planet::tilt),
-			Codec.floatRange(-360, 360).fieldOf("texture_rotation").forGetter(Planet::texture_rotation),
-			Codec.floatRange(0.1, 750).fieldOf("size").forGetter(Planet::size)
+			Codec.floatRange(-360.0f, 360.0f).fieldOf("procession").forGetter(Planet::procession),
+			Codec.floatRange(-360.0f, 360.0f).fieldOf("tilt").forGetter(Planet::tilt),
+			Codec.floatRange(-360.0f, 360.0f).fieldOf("texture_rotation").forGetter(Planet::texture_rotation),
+			Codec.floatRange(0.1f, 750.0f).fieldOf("size").forGetter(Planet::size)
 		).apply(instance, Planet::new)
 	);
-	 */
 	
 	/**
 	 * @param matrices
