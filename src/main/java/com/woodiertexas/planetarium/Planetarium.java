@@ -26,7 +26,7 @@ public class Planetarium {
 			Codec.floatRange(-360, 360).fieldOf("procession").forGetter(Planet::procession),
 			Codec.floatRange(-360, 360).fieldOf("tilt").forGetter(Planet::tilt),
 			Codec.floatRange(-360, 360).fieldOf("texture_rotation").forGetter(Planet::texture_rotation),
-			Codec.floatRange(1, Integer.MAX_VALUE).fieldOf("size").forGetter(Planet::size)
+			Codec.floatRange(0.1, 750).fieldOf("size").forGetter(Planet::size)
 		).apply(instance, Planet::new)
 	);
 	 */
