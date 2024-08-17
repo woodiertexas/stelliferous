@@ -27,7 +27,6 @@ public class Planetarium {
 	 * @param tickDelta  Time between ticks.
 	 * @param world      The client world to render in.
 	 */
-
 	public static void renderPlanet(MatrixStack matrices, Identifier id, PlanetInfo planetInfo, float tickDelta, ClientWorld world) {
 		matrices.push();
 		
