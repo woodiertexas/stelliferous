@@ -1,6 +1,7 @@
 {
-	"procession": 110,
+	"procession": 20,
 	"tilt": 0,
-	"texture_rotation": 90,
-	"size": 12.5
+	"inclination": -28,
+	"texture_rotation": 2.64,
+	"size": 11
 }
