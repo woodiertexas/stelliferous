@@ -30,19 +30,21 @@ public class Planetarium {
 
 	public static void renderPlanet(MatrixStack matrices, Identifier id, PlanetInfo planetInfo, float tickDelta, ClientWorld world) {
 		matrices.push();
-
+		
 		// First, line planet up where the sun is in the sky
 		matrices.rotate(Axis.Y_POSITIVE.rotationDegrees(90.0F));
-
+		
 		// Second, change the orbital tilt of the planet
-		matrices.rotate(Axis.Y_POSITIVE.rotationDegrees(planetInfo.tilt()));
-
+		matrices.rotate(Axis.Y_POSITIVE.rotationDegrees(planetInfo.tilt())); // tilt
+		
 		// Third, set the angle of the planet in the sky and offset it.
-		matrices.rotate(Axis.X_POSITIVE.rotationDegrees(-world.getSkyAngle(tickDelta) * 360.0F + planetInfo.procession()));
-
+		matrices.rotate(Axis.X_POSITIVE.rotationDegrees(-world.getSkyAngle(tickDelta) * 360.0F + planetInfo.procession())); // procession
+		
+		matrices.rotate(Axis.Z_POSITIVE.rotationDegrees(planetInfo.inclination())); // inclination
+		
 		// Finally, change the rotation of the planet texture
 		matrices.rotate(Axis.Y_POSITIVE.rotationDegrees(planetInfo.texture_rotation()));
-
+		
 		if (world.getTimeOfDay() % 24000L >= 11800) {
 			Matrix4f matrix4f = matrices.peek().getModel();
 			RenderSystem.setShaderTexture(0, planetInfo.getTexture(id));
@@ -51,13 +53,13 @@ public class Planetarium {
 			bufferBuilder.xyz(matrix4f, planetInfo.size(), 99.0F, -planetInfo.size()).uv0(1.0F, 0.0F); // u: 1.0
 			bufferBuilder.xyz(matrix4f, planetInfo.size(), 99.0F, planetInfo.size()).uv0(1.0F, 1.0F); // u: 1.0, v: 1.0
 			bufferBuilder.xyz(matrix4f, -planetInfo.size(), 99.0F, planetInfo.size()).uv0(0.0F, 1.0F); // v: 1.0
-
+			
 			float rainGradient = 1.0f - world.getRainGradient(tickDelta);
 			float transparency = 2 * world.getStarBrightness(tickDelta) * rainGradient;
 			if (transparency > 0.0f) {
 				RenderSystem.setShaderColor(transparency, transparency, transparency, transparency);
 			}
-
+			
 			BufferRenderer.drawWithShader(bufferBuilder.endOrThrow());
 		}
 		matrices.pop();

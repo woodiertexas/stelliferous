@@ -33,7 +33,7 @@ public class WorldRendererMixin {
 
 	@Unique
 	private PlanetManager planetarium$planetManager;
-
+	
 	@Inject(method = "<init>", at = @At("TAIL"))
 	private void createPlanetManager(MinecraftClient client, EntityRenderDispatcher entityRenderDispatcher, BlockEntityRenderDispatcher blockEntityDispatcher, BufferBuilderStorage bufferBuilders, CallbackInfo ci) {
 		this.planetarium$planetManager = new PlanetManager();
