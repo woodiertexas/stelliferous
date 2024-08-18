@@ -1,4 +1,4 @@
-package io.github.woodiertexas.planetarium;
+package com.woodiertexas.planetarium;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

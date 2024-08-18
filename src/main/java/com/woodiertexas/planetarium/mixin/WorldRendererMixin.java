@@ -1,4 +1,4 @@
-package io.github.woodiertexas.planetarium.mixin;
+package com.woodiertexas.planetarium.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static io.github.woodiertexas.planetarium.Planetarium.MODID;
+import static com.woodiertexas.planetarium.Planetarium.MODID;
 
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
