@@ -30,7 +30,7 @@ public record PlanetInfo(float procession, float tilt, float inclination, float 
 	public Identifier getTexture(Identifier id) {
 		// Identifier.of(id.getNamespace, "textures/planets/" + id.getPath() + ".png");
 		if (texture_override.isEmpty()) {
-			return id.withPrefix("textures/planets/").extendPath(".png");
+			return id.withPrefix("textures/planetarium/planets/").extendPath(".png");
 		}
 		
 		return texture_override.get().withPrefix("textures/").extendPath(".png");
