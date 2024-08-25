@@ -85,7 +85,7 @@ modrinth {
 	projectId = "planetarium"
 	uploadFile = remapJar
 	additionalFiles = [sourcesJar]
-	gameVersions = ["1.19.3", "1.19.4", "1.20", "1.20.1", "1.20.2", "1.20.4"]
+	gameVersions = ["1.21"]
 	loaders = ["quilt"]
 	def ref = System.getenv("GITHUB_REF")
 	changelog = System.getenv("CHANGELOG") ?:
