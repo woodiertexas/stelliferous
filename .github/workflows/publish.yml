@@ -25,3 +25,5 @@ jobs:
         with:
           modrinth-id: dBOB3VZD
           modrinth-token: ${{ secrets.MODRINTH }}
+          
+          github-token: ${{ secrets.GITHUB_TOKEN }}
