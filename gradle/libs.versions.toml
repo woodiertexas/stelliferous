@@ -14,4 +14,3 @@ quilted_fabric_api_resource_loader = { module = "org.quiltmc.quilted-fabric-api:
 
 [plugins]
 quilt_loom = { id = "org.quiltmc.loom", version = "1.7+" }
-minotaur = { id = "com.modrinth.minotaur", version = "2.+" }
