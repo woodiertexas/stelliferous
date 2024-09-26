@@ -14,7 +14,6 @@ on:
       - '.github/**'
       - '!.github/workflows/**'
       - '**.md'
-      - 'python_scripts/**'
   workflow_dispatch:
 
 jobs:
