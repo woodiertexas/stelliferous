@@ -19,10 +19,7 @@ jobs:
           java-version: 21
           
       - name: Build and publish with Gradle
-        run: ./gradlew publish
-        env:
-          BUILD_RELEASE: ${{ github.event.prelease == false }}
-          CHANGELOG: ${{ github.event.release.body }}
+        run: ./gradlew assemble
           
       - uses: Kir-Antipov/mc-publish@v3.3
         with:
