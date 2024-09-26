@@ -19,10 +19,9 @@ jobs:
           java-version: 21
           
       - name: Build and publish with Gradle
-        run: ./gradlew modrinth publish
+        run: ./gradlew publish
         env:
           BUILD_RELEASE: ${{ github.event.prelease == false }}
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH }}
           CHANGELOG: ${{ github.event.release.body }}
           
       - uses: Kir-Antipov/mc-publish@v3.3
