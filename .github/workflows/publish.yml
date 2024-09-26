@@ -27,7 +27,5 @@ jobs:
           
       - uses: Kir-Antipov/mc-publish@v3.3
         with:
-          # Only include this section if you wish to publish
-          # your assets on Modrinth.
           modrinth-id: dBOB3VZD
           modrinth-token: ${{ secrets.MODRINTH }}
