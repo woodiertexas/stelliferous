@@ -15,7 +15,7 @@
 		"issues": "https://github.com/woodiertexas/planetarium/issues",
 		"sources": "https://github.com/woodiertexas/planetarium"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/planetarium/icon.png",
 	"environment": "*",
 	"entrypoints": {},
@@ -27,8 +27,5 @@
 		"minecraft": ">=1.21",
 		"java": ">=21",
 		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
 	}
 }
