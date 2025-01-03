@@ -20,24 +20,17 @@ public class Planetarium {
 	public static final Logger LOGGER = LoggerFactory.getLogger("Planetarium");
 	public static final String MOD_ID = "planetarium";
 	
-	/**
-	 * @param matrices   The matrix stack for rendering.
-	 * @param id         The id for the planet. (Ex: Mercury, Venus, Earth, and so on)
-	 * @param planetInfo The planet data.
-	 * @param tickDelta  Time between ticks.
-	 * @param world      The client world to render in.
-	 */
 	public static void renderPlanet(MatrixStack matrices, Identifier id, PlanetInfo planetInfo, float tickDelta, ClientWorld world) {
 		matrices.push();
 		
 		// First, line planet up where the sun is in the sky
-		matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(90.0F));
+		matrices.multiply(Axis.Y_NEGATIVE.rotationDegrees(0.0F));
 		
 		// Second, change the orbital tilt of the planet
 		matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(planetInfo.tilt())); // tilt
 		
 		// Third, set the angle of the planet in the sky and offset it.
-		matrices.multiply(Axis.X_POSITIVE.rotationDegrees(-world.getSkyAngle(tickDelta) * 360.0F + planetInfo.procession())); // procession
+		matrices.multiply(Axis.X_NEGATIVE.rotationDegrees(world.getSkyAngle(tickDelta) * 360.0F + planetInfo.procession())); // procession
 		
 		matrices.multiply(Axis.Z_POSITIVE.rotationDegrees(planetInfo.inclination())); // inclination
 		
@@ -47,12 +40,15 @@ public class Planetarium {
 		if (world.getTimeOfDay() % 24000L >= 11800) {
 			Matrix4f matrix4f = matrices.peek().getModel();
 			RenderSystem.setShaderTexture(0, planetInfo.getTexture(id));
-			BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
+			
+			final BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
 			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-			bufferBuilder.vertex(matrix4f, -planetInfo.size(), 99.0F, -planetInfo.size()).uv(0.0F, 0.0F);
-			bufferBuilder.vertex(matrix4f, planetInfo.size(), 99.0F, -planetInfo.size()).uv(1.0F, 0.0F); // u: 1.0
-			bufferBuilder.vertex(matrix4f, planetInfo.size(), 99.0F, planetInfo.size()).uv(1.0F, 1.0F); // u: 1.0, v: 1.0
-			bufferBuilder.vertex(matrix4f, -planetInfo.size(), 99.0F, planetInfo.size()).uv(0.0F, 1.0F); // v: 1.0
+			float finalPlanetSize = planetInfo.size() * 0.75F;
+			bufferBuilder.vertex(matrix4f, -finalPlanetSize, -100.0F, finalPlanetSize).uv(0.0F, 0.0F).next();
+			bufferBuilder.vertex(matrix4f, finalPlanetSize, -100.0F, finalPlanetSize).uv(1.0F, 0.0F).next(); // u: 1.0
+			bufferBuilder.vertex(matrix4f, finalPlanetSize, -100.0F, -finalPlanetSize).uv(1.0F, 1.0F).next(); // u: 1.0, v: 1.0
+			bufferBuilder.vertex(matrix4f, -finalPlanetSize, -100.0F, -finalPlanetSize).uv(0.0F, 1.0F).next(); // v: 1.0
+			
 			
 			float rainGradient = 1.0f - world.getRainGradient(tickDelta);
 			float transparency = 2 * world.getStarBrightness(tickDelta) * rainGradient;
@@ -62,6 +58,7 @@ public class Planetarium {
 			
 			BufferRenderer.drawWithShader(bufferBuilder.end());
 		}
+		
 		matrices.pop();
 	}
 }
