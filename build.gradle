@@ -1,7 +1,6 @@
 plugins {
 	id 'maven-publish'
 	alias libs.plugins.quilt.loom
-	alias libs.plugins.minotaur
 }
 
 base {
