@@ -47,11 +47,11 @@ public class Planetarium {
 		if (world.getTimeOfDay() % 24000L >= 11800) {
 			Matrix4f matrix4f = matrices.peek().getModel();
 			RenderSystem.setShaderTexture(0, planetInfo.getTexture(id));
-			BufferBuilder bufferBuilder = Tessellator.getInstance().method_60827(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-			bufferBuilder.method_22918(matrix4f, -planetInfo.size(), 99.0F, -planetInfo.size()).method_22913(0.0F, 0.0F);
-			bufferBuilder.method_22918(matrix4f, planetInfo.size(), 99.0F, -planetInfo.size()).method_22913(1.0F, 0.0F); // u: 1.0
-			bufferBuilder.method_22918(matrix4f, planetInfo.size(), 99.0F, planetInfo.size()).method_22913(1.0F, 1.0F); // u: 1.0, v: 1.0
-			bufferBuilder.method_22918(matrix4f, -planetInfo.size(), 99.0F, planetInfo.size()).method_22913(0.0F, 1.0F); // v: 1.0
+			BufferBuilder bufferBuilder = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+			bufferBuilder.xyz(matrix4f, -planetInfo.size(), 99.0F, -planetInfo.size()).uv0(0.0F, 0.0F);
+			bufferBuilder.xyz(matrix4f, planetInfo.size(), 99.0F, -planetInfo.size()).uv0(1.0F, 0.0F); // u: 1.0
+			bufferBuilder.xyz(matrix4f, planetInfo.size(), 99.0F, planetInfo.size()).uv0(1.0F, 1.0F); // u: 1.0, v: 1.0
+			bufferBuilder.xyz(matrix4f, -planetInfo.size(), 99.0F, planetInfo.size()).uv0(0.0F, 1.0F); // v: 1.0
 			
 			float rainGradient = 1.0f - world.getRainGradient(tickDelta);
 			float transparency = 2 * world.getStarBrightness(tickDelta) * rainGradient;
@@ -59,7 +59,7 @@ public class Planetarium {
 				RenderSystem.setShaderColor(transparency, transparency, transparency, transparency);
 			}
 			
-			BufferRenderer.drawWithShader(bufferBuilder.method_60800());
+			BufferRenderer.drawWithShader(bufferBuilder.endOrThrow());
 		}
 		matrices.pop();
 	}
