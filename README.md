@@ -6,4 +6,4 @@ The project source is licensed under the MIT license whereas the [project assets
 [Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International License](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en).
 
 ## About Ports
-I personally welcome third party ports to previous minecraft versions, but I respectfully ask that all third party ports remain Quilt exclusive. That means no ports to (neo)Forge, Fabric or any other non-Quilt modloader.
+I personally welcome third party ports to previous minecraft versions, but I respectfully ask that all third party ports remain Quilt/Fabric exclusive. That means no ports to (neo)Forge or any other non-Quilt/Fabric modloader.
