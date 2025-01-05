@@ -17,14 +17,14 @@
 	},
 	"license": "MIT",
 	"icon": "assets/planetarium/icon.png",
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {},
 	"mixins": [
 		"planetarium.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.16.9",
-		"minecraft": ">=1.21",
+		"minecraft": ["1.21", "1.21.1"],
 		"java": ">=21",
 		"fabric-api": "*"
 	}
