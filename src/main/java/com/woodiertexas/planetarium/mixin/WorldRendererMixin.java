@@ -8,13 +8,11 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(WorldRenderer.class)
@@ -59,17 +57,4 @@ public class WorldRendererMixin {
 		Planetarium.renderPlanet(matrices, NEPTUNE, -56.00F, -26.50F, 28.32F, 6.40F, tickDelta, world);
 		Planetarium.renderPlanet(matrices, NORTH_STAR, 0.00F, -86.50F, 0.00F, 1.35F, tickDelta, world);
 	}
-	
-	@Inject(method = "renderEndSky", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;depthMask(Z)V"))
-	private void renderPlanetsInEnd(MatrixStack matrices, CallbackInfo ci) {
-		assert world != null;
-		Planetarium.renderPlanet(matrices, MERCURY, 140.00F, -30.00F, 0.03F, 5.00F, world);
-	}
-	
-	/*
-	@ModifyVariable(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At("STORE"), ordinal = 5)
-	float changeSunAndMoonSize(float moonSize) {
-		return 8.00F;
-	}
-	 */
 }
