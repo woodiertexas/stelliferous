@@ -10,14 +10,14 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 import org.jetbrains.annotations.NotNull;
-import org.quiltmc.qsl.resource.loader.api.reloader.IdentifiableResourceReloader;
 
-public class PlanetManager extends JsonDataLoader implements IdentifiableResourceReloader {
+public class PlanetManager extends JsonDataLoader implements IdentifiableResourceReloadListener {
 	private static final Gson GSON = new GsonBuilder().create();
 	private Map<Identifier, PlanetInfo> planets;
 	
@@ -60,7 +60,7 @@ public class PlanetManager extends JsonDataLoader implements IdentifiableResourc
 	}
 	
 	@Override
-	public @NotNull Identifier getQuiltId() {
-		return new Identifier(Planetarium.MOD_ID, "planet_reloader");
+	public @NotNull Identifier getFabricId() {
+		return Identifier.of(Planetarium.MOD_ID, "planet_reloader");
 	}
 }

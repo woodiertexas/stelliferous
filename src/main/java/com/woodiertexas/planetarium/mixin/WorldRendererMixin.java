@@ -48,7 +48,7 @@ public class WorldRendererMixin {
 	@Inject(method = "<init>", at = @At("TAIL"))
 	private void createPlanetManager(MinecraftClient client, EntityRenderDispatcher entityRenderDispatcher, BlockEntityRenderDispatcher blockEntityDispatcher, BufferBuilderStorage bufferBuilders, CallbackInfo ci) {
 		this.planetarium$planetManager = new PlanetManager();
-		ResourceLoader.get(ResourceType.CLIENT_RESOURCES).registerReloader(this.planetarium$planetManager);
+		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(this.planetarium$planetManager);
 	}
 	
 	@Inject(method = "renderSky", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getStarBrightness(F)F"))

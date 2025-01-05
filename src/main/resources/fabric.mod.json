@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "planetarium",
+	"version": "${version}",
+	"name": "Planetarium",
+	"description": "Renders solar system planets in Minecraft's skybox at night.",
+	"contributors": [
+		"woodiertexas",
+		"OroArmor",
+		"gayasslily",
+		"crackers0106"
+	],
+	"contact": {
+		"homepage": "https://modrinth.com/mod/planetarium",
+		"issues": "https://github.com/woodiertexas/planetarium/issues",
+		"sources": "https://github.com/woodiertexas/planetarium"
+	},
+	"license": "MIT",
+	"icon": "assets/planetarium/icon.png",
+	"environment": "*",
+	"entrypoints": {},
+	"mixins": [
+		"planetarium.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.9",
+		"minecraft": ">=1.20",
+		"java": ">=17",
+		"fabric-api": "*"
+	}
+}
