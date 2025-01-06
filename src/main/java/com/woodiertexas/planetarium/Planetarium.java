@@ -39,9 +39,10 @@ public class Planetarium {
 		// Third, set the angle of the planet in the sky and offset it.
 		matrices.rotate(Axis.X_POSITIVE.rotationDegrees(-world.getSkyAngle(tickDelta) * 360.0F + planetInfo.procession())); // procession
 		
+		// Fourth, set the inclination of the planet.
 		matrices.rotate(Axis.Z_POSITIVE.rotationDegrees(planetInfo.inclination())); // inclination
 		
-		// Finally, change the rotation of the planet texture
+		// Finally, change the rotation of the planet texture.
 		matrices.rotate(Axis.Y_POSITIVE.rotationDegrees(planetInfo.texture_rotation()));
 		
 		if (world.getTimeOfDay() % 24000L >= 11800) {
