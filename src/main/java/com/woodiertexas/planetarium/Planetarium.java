@@ -6,8 +6,12 @@ import com.mojang.blaze3d.vertex.BufferRenderer;
 import com.mojang.blaze3d.vertex.Tessellator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormats;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Axis;
 import org.joml.Matrix4f;
@@ -32,15 +36,15 @@ public class Planetarium {
 			
 			final BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
 			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-			bufferBuilder.vertex(matrix4f, -size, -100.0F, size).uv(0.0F, 0.0F).next();
-			bufferBuilder.vertex(matrix4f, size, -100.0F, size).uv(1.0F, 0.0F).next(); // u: 1.0
-			bufferBuilder.vertex(matrix4f, size, -100.0F, -size).uv(1.0F, 1.0F).next(); // u: 1.0, v: 1.0
-			bufferBuilder.vertex(matrix4f, -size, -100.0F, -size).uv(0.0F, 1.0F).next(); // v: 1.0
+			bufferBuilder.vertex(matrix4f, -size, -100.00F, size).uv(0.00F, 0.00F).next();
+			bufferBuilder.vertex(matrix4f, size, -100.00F, size).uv(1.00F, 0.00F).next(); // u: 1.0
+			bufferBuilder.vertex(matrix4f, size, -100.00F, -size).uv(1.00F, 1.00F).next(); // u: 1.0, v: 1.0
+			bufferBuilder.vertex(matrix4f, -size, -100.00F, -size).uv(0.00F, 1.00F).next(); // v: 1.0
 			
 			
-			float rainGradient = 1.0f - world.getRainGradient(tickDelta);
-			float transparency = 2 * world.getStarBrightness(tickDelta) * rainGradient;
-			if (transparency > 0.0f) {
+			float rainGradient = 1.00F - world.getRainGradient(tickDelta);
+			float transparency = 2.00F * world.getStarBrightness(tickDelta) * rainGradient;
+			if (transparency > 0.00F) {
 				RenderSystem.setShaderColor(transparency, transparency, transparency, transparency);
 			}
 			
